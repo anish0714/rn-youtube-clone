@@ -8,25 +8,65 @@ import { FontAwesome5, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import Constant from "expo-constants";
 
 //Navigation
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
+
+//redux
+import { useDispatch, useSelector } from "react-redux";
 
 const Header = () => {
   const navigation = useNavigation();
+  const { colors } = useTheme();
+  const myColor = colors.iconColor;
+
+  //dispatch
+  const dispatch = useDispatch();
+  //selector
+  const currentTheme = useSelector((state) => {
+    return state.myDarkMode;
+  });
+
   return (
-    <View style={styles.headerContainer}>
+    <View
+      style={{
+        marginTop: Constant.statusBarHeight,
+        height: 40,
+        backgroundColor: colors.headerColor,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        elevation: 10,
+      }}
+    >
       <View style={styles.headerLeft}>
         {/* Icon and YOUTUBE */}
         <FontAwesome5 name="youtube" style={styles.youtubeIcon} />
-        <Text style={styles.youtubeText}>YouTube</Text>
+        <Text
+          style={{
+            fontSize: 22,
+            marginLeft: 5,
+            fontWeight: "bold",
+            color: myColor,
+          }}
+        >
+          YouTube
+        </Text>
       </View>
       <View style={styles.headerRight}>
-        <FontAwesome name="video-camera" style={styles.headerRightIcons} />
+        <FontAwesome
+          name="video-camera"
+          style={{ color: myColor, fontSize: 32, margin: 5 }}
+        />
         <FontAwesome
           name="search"
           onPress={() => navigation.navigate("search")}
-          style={styles.headerRightIcons}
+          style={{ color: myColor, fontSize: 32, margin: 5 }}
         />
-        <MaterialIcons name="account-circle" style={styles.headerRightIcons} />
+        <MaterialIcons
+          name="account-circle"
+          onPress={() =>
+            dispatch({ type: "CHANGE_THEME", payload: !currentTheme })
+          }
+          style={{ color: myColor, fontSize: 32, margin: 5 }}
+        />
       </View>
     </View>
   );

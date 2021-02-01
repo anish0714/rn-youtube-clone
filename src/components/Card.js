@@ -1,35 +1,65 @@
 import React from "react";
-import { StyleSheet, View, Text, Image, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 //Icons
 import { MaterialIcons } from "@expo/vector-icons";
+//Navigation
+import { useNavigation, useTheme } from "@react-navigation/native";
 
 //https://www.googleapis.com/youtube/v3/search?q=10&key=[YOUR_API_KEY]
 const Card = ({ videoId, title, channel }) => {
+  const navigation = useNavigation();
+  const { colors } = useTheme();
+  const textColor = colors.iconColor;
 
-  //const videoUrl = !videoId ? 
   return (
-    <View style={styles.cardContainer}>
-      <Image
-        source={{
-          uri: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
-        }}
-        style={styles.cardImage}
-      />
-      <View style={styles.cardBottom}>
-        {/* logo + 2 texts */}
-        <MaterialIcons name="account-circle" style={styles.cardIcon} />
-        <View style={styles.cardTextContainer}>
-          <Text
-            ellipsizeMode="tail"
-            numberOfLines={2}
-            style={styles.cardTextTop}
-          >
-            {title}
-          </Text>
-          <Text>{channel}</Text>
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate("videoPlayer", [{ videoId: videoId, title: title }])
+      }
+    >
+      <View style={styles.cardContainer}>
+        <Image
+          source={{
+            uri: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+          }}
+          style={styles.cardImage}
+        />
+        <View style={styles.cardBottom}>
+          {/* logo + 2 texts */}
+          <MaterialIcons
+            name="account-circle"
+            style={{ color: textColor, fontSize: 45, margin: 5 }}
+          />
+          <View style={styles.cardTextContainer}>
+            <Text
+              ellipsizeMode="tail"
+              numberOfLines={2}
+              style={{
+                fontSize: 20,
+                width: Dimensions.get("screen").width - 100,
+                color: textColor,
+              }}
+            >
+              {title}
+            </Text>
+            <Text
+              style={{
+                color: textColor,
+              }}
+            >
+              {channel}
+            </Text>
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 const styles = StyleSheet.create({

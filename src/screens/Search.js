@@ -15,17 +15,20 @@ import MiniCard from "../components/MiniCard";
 import Constant from "expo-constants";
 //Redux
 import { useSelector, useDispatch } from "react-redux";
-
-//https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=songs&type=video&key=AIzaSyDW5bCXvPjIsLt8Iph4FU8s5C7UaQIFp3o
+//navigation
+import { useTheme } from "@react-navigation/native";
 
 const Search = ({ navigation }) => {
   const [text, setText] = useState("");
   // const [miniCardData, setMiniCardData] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const { colors } = useTheme();
+  const myColor = colors.iconColor;
+
   const dispatch = useDispatch();
   const miniCardData = useSelector((state) => {
-    return state;
+    return state.cardData;
   });
 
   const fetchData = () => {
@@ -44,11 +47,20 @@ const Search = ({ navigation }) => {
 
   return (
     <View style={styles.searchContainer}>
-      <View style={styles.searchHeader}>
+      <View
+        style={{
+          backgroundColor: colors.headerColor,
+          padding: 5,
+          flexDirection: "row",
+          justifyContent: "space-around",
+          elevation: 6,
+        }}
+      >
         <Ionicons
           name="md-arrow-back"
           size={32}
           onPress={() => navigation.goBack()}
+          style={{ color: myColor }}
         />
         <TextInput
           value={text}
@@ -56,7 +68,12 @@ const Search = ({ navigation }) => {
           style={styles.searchTextInput}
         />
 
-        <Ionicons name="md-send" size={32} onPress={() => fetchData()} />
+        <Ionicons
+          name="md-send"
+          size={32}
+          onPress={() => fetchData()}
+          style={{ color: myColor }}
+        />
       </View>
 
       {loading ? (
